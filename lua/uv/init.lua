@@ -118,15 +118,16 @@ function M.run_command(cmd)
 	})
 end
 
+local is_windows = package.config:sub(1, 1) == '\\'
+local sep_slash = is_windows and '\\' or '/'
 -- Virtual environment activation
 ---@param venv_path string
 function M.activate_venv(venv_path)
-	local is_windows = package.config:sub(1, 1) == '\\'
 	local venv_dir = is_windows and 'Scripts' or 'bin'
 	local sep = is_windows and ';' or ':'
 
 	vim.env.VIRTUAL_ENV = venv_path
-	vim.env.PATH = venv_path .. '/' .. venv_dir .. sep .. vim.env.PATH
+	vim.env.PATH = venv_path .. sep_slash .. venv_dir .. sep .. vim.env.PATH
 
 	if M.config.notify_activate_venv then
 		vim.notify("Activated virtual environment: " .. venv_path, vim.log.levels.INFO)
@@ -136,7 +137,7 @@ end
 -- Auto-activate the .venv if it exists at the project root
 ---@return boolean
 function M.auto_activate_venv()
-	local venv_path = vim.fn.getcwd() .. "/.venv"
+	local venv_path = vim.fn.getcwd() .. sep_slash .. ".venv"
 	if vim.fn.isdirectory(venv_path) == 1 then
 		M.activate_venv(venv_path)
 		return true
