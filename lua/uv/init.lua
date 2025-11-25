@@ -175,6 +175,8 @@ local function open_term(cmd)
 		vim.cmd("vsplit")
 	end
 	vim.cmd("term " .. cmd)
+	vim.bo.bufhidden = 'delete' -- delete when the terminal window is closed
+	vim.bo.filetype = 'toggleterm' -- set filetype
 end
 
 -- Function to create a temporary file with the necessary context and selected code
