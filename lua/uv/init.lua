@@ -859,12 +859,14 @@ end
 
 -- Set up auto commands
 function M.setup_autocommands()
-	if M.config.auto_commands then
-		if M.config.auto_activate_venv then
-			M.auto_activate_venv()
+	if M.config.auto_activate_venv then
+		M.auto_activate_venv()
 
+		if M.config.auto_commands then
+			vim.api.nvim_create_augroup('UVDirChanged', {clear = true})
 			vim.api.nvim_create_autocmd({ "DirChanged" }, {
-				pattern = { "global" },
+				group = 'UVDirChanged',
+				pattern = '*',
 				callback = function()
 					M.auto_activate_venv()
 				end,
@@ -888,9 +890,7 @@ function M.setup(opts)
 	end
 
 	-- Set up autocommands if enabled
-	if M.config.auto_commands ~= false then
-		M.setup_autocommands()
-	end
+	M.setup_autocommands()
 
 	-- Set up pickers if integration is enabled
 	if M.config.picker_integration then
