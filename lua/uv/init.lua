@@ -715,6 +715,10 @@ function M.setup_commands()
 	vim.api.nvim_create_user_command("UVRemovePackage", function(opts)
 		M.run_command("uv remove " .. opts.args)
 	end, { nargs = 1 })
+
+	vim.api.nvim_create_user_command("UVOpenTerm", function()
+		open_term('')
+	end, {})
 end
 
 -- Set up keymaps
